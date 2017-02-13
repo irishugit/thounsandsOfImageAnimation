@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+
+        <!-- <script src="./lib/three.min.js"></script> -->
+        <script src="./lib/jquery-2.2.0.min.js"></script>
+        
+        <style type="text/css">
+        	*{
+        		padding: 0;
+        		margin:0;
+        	}
+        	html,body,canvas{
+        		width: 100%;
+        		height: 100%;
+        		overflow: hidden;
+        	}
+        </style>
+    </head>
+    <body onload="init()">
+    	<canvas id="myCanvas" style="width: 100%;height: 100%;"></canvas>
+
+
+
+                <script type="x-shader/x-vertex" id="vertexshader">
+
+            //uniform float zoom;
+
+            attribute float alpha;
+
+            varying float vAlpha;
+
+            void main() {
+
+                vAlpha = 1.0 - alpha;
+
+                vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+
+                gl_PointSize = 10.0 * ( 300.0 / -mvPosition.z );
+
+                gl_Position = projectionMatrix * mvPosition;
+
+            }
+
+        </script>
+
+        <script type="x-shader/x-fragment" id="fragmentshader">
+
+            uniform sampler2D tex1;
+
+            varying float vAlpha;
+
+            void main() {
+
+                gl_FragColor = texture2D(tex1, gl_PointCoord);
+                gl_FragColor.r = (1.0 - gl_FragColor.r) * vAlpha + gl_FragColor.r;
+
+            }
+
+        </script>
+
+        <!-- <script src="./js/lib.js"></script> -->
+        <script src="./lib/three.js"></script>
+        <script src="./lib/CanvasRenderer.js"></script>
+        <script src="./lib/Projector.js"></script>
+        <script src="./lib/tween.min.js"></script>
+        <script src="./lib/TrackballControls.js"></script>
+        
+
+        <script src="./js/index.js"></script>
+    		<script src="./js/imageWall.js"></script>
+        <script src="./js/data.js"></script>
+    </body>
+</html>
